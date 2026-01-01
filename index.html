@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <script src="mapel.js"></script>
 </head>
 <body>
 
@@ -16,16 +17,19 @@
                 <div class="logo">
                     <i class="fa-solid fa-brain text-blue"></i>EduPlan<span class="text-blue">AI</span>
                 </div>
-                <p class="subtitle">Produktivitas Pengajar, Didukung AI</p>
+                <p class="subtitle">Membantu Produktivitas Para Pengajar di Indonesia</p>
 
                 <div class="coin-balance">
                     <div>
                         <span style="font-size: 0.7rem; color: #94a3b8; display: block;">Koin Anda</span>
-                        <span class="coin-count">
-                            <i class="fa-solid fa-coins text-yellow"></i> 30 Koin</span>
+                        <span class="coin-count" id="ui-coin-count">
+                            <i class="fa-solid fa-coins"></i> <span id="coin-value">0</span>
                         </span>
+                        <div id="refill-info" class="hidden" style="font-size: 0.65rem; color: #64748b; margin-top: 4px;">
+                            <i class="fa-regular fa-clock"></i> Reset gratis: <span id="refill-timer">...</span>
+                        </div>
                     </div>
-                    <button class="btn-topup" onclick="alert('Fitur Top Up akan segera hadir!')">
+                    <button class="btn-topup" onclick="window.open('LINK_MAYAR_KAMU', '_blank')">
                         <i class="fa-solid fa-plus"></i> Top Up
                     </button>
                 </div>
@@ -46,6 +50,7 @@
                     <div class="form-group half">
                         <label>Jenjang</label>
                         <select id="rpp_jenjang" onchange="updateKelas('rpp')">
+                            <option disabled selected>Pilih Jenjang...</option>
                             <option value="SD">SD</option>
                             <option value="SMP">SMP</option>
                             <option value="SMA">SMA</option>
@@ -53,13 +58,19 @@
                     </div>
                     <div class="form-group half">
                         <label>Kelas</label>
-                        <select id="rpp_kelas"><option disabled selected>-</option></select>
+                        <select id="rpp_kelas">
+                            <option disabled selected>Pilih Kelas</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Mata Pelajaran</label>
-                    <input type="text" id="rpp_mapel" placeholder="Cth: Bahasa Indonesia" min="10" max="20">
+                    <select id="rpp_mapel" onchange="checkMapelLainnya('rpp')">
+                        <option disabled selected>Pilih Jenjang & Kelas dulu...</option>
+                    </select>
+                    
+                    <input type="text" id="rpp_mapel_manual" class="hidden" placeholder="Tulis nama mata pelajaran..." style="margin-top: 10px;">
                 </div>
 
                 <div class="form-group">
@@ -89,6 +100,7 @@
                     <div class="form-group half">
                         <label>Jenjang</label>
                         <select id="quiz_jenjang" onchange="updateKelas('quiz')">
+                            <option value="" disabled selected>Pilih Jenjang...</option>
                             <option value="SD">SD</option>
                             <option value="SMP">SMP</option>
                             <option value="SMA">SMA</option>
@@ -102,12 +114,15 @@
 
                 <div class="form-group">
                     <label>Mata Pelajaran</label>
-                    <input type="text" id="quiz_topik" placeholder="Cth: Matematika" min="10" max="50">
+                    <select id="quiz_mapel" onchange="checkMapelLainnya('quiz')">
+                        <option disabled selected>Pilih Jenjang & Kelas dulu...</option>
+                    </select>
+                    <input type="text" id="quiz_mapel_manual" class="hidden" placeholder="Tulis mapel..." style="margin-top: 10px;">
                 </div>
 
                 <div class="form-group">
                     <label>Topik Soal</label>
-                    <input type="text" id="quiz_topik" placeholder="Cth: Pecahan Desimal" min="10" max="50">
+                    <input type="text" id="quiz_topik" placeholder="Cth: Pecahan Desimal" min="5" max="50">
                 </div>
 
                 <div class="form-row">
@@ -137,6 +152,14 @@
                     <i class="fa-solid fa-puzzle-piece"></i> Buat Soal (10 Koin)
                 </button>
             </form>
+            <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #334155; text-align: center;">
+                <p style="font-size: 0.75rem; color: #94a3b8;">
+                    Powered by 
+                    <span style="font-weight: 600; background: linear-gradient(to right, #2D79EF, #EC5360); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Google Gemini </i>
+                    </span>
+                </p>
+            </div>
         </aside>
 
         <main class="result-panel">
@@ -163,6 +186,7 @@
         </main>
     </div>
 
+    
     <script src="script.js"></script>
 </body>
 </html>
