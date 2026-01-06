@@ -424,7 +424,7 @@ function generateRapor() {
 
     document.getElementById('result-title').innerHTML = `<i class="fa-solid fa-pen-nib text-blue"></i> Catatan Rapor (${nama})`;
 
-    sendRequestAuth('generate-rapor', data);
+    sendRequest('generate-rapor', data);
 }
 
 // FITUR COPY TEXT
@@ -442,4 +442,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Cek apakah user sudah login sebelumnya?
     checkSession(); 
+
 });
