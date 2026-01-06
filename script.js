@@ -313,7 +313,7 @@ async function sendRequest(endpoint, dataPayload) {
             // UPDATE KOIN JIKA ADA
             if (result.meta && result.meta.remaining_coins !== undefined) {
                 const userSpan = document.getElementById('display-coins');
-                if (userSpan) userSpan.innerHTML = `<i class="fa-solid fa-coins text-yellow-400"></i> ${result.meta.remaining_coins}`;
+                if (userSpan) userSpan.innerText = result.meta.remaining_coins;
                 
                 let currentUser = JSON.parse(localStorage.getItem('eduplan_user'));
                 currentUser.coins = result.meta.remaining_coins;

@@ -215,11 +215,17 @@ async def endpoint_raport(request: RaportRequest, authorize: str = Header(None))
     try:
         result = generate_raport(request, is_pro_user=is_pro)
 
+        # C. POTONG KOIN & UPDATE DB
         if final_cost > 0:
             users_collection.update_one(
-                {"_id": user["_id"]},
+                {"_id": user["_id"]}, 
                 {"$inc": {"coins": -final_cost}}
             )
+            # Ambil koin terbaru setelah dipotong
+            updated_user = users_collection.find_one({"_id": user["_id"]})
+            remaining_coins = updated_user["coins"]
+        else:
+            remaining_coins = user.get("coins", 0)
 
         save_history(
             user_id=str(user["_id"]),
