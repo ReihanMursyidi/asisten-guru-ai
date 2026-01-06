@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from features.rpp_generator import RPPGenerator, generate_rpp
 from features.quiz_generator import QuizRequest, generate_quiz_content
-from features.admin_generator import RaportRequest, generate_raport # Pastikan nama class sesuai
+from features.admin_generator import RaportRequest, generate_rapor_comment
 from database import check_db_connection, users_collection
 from security import verify_password, get_password_hash, create_access_token
 from pydantic import BaseModel
@@ -206,9 +206,8 @@ def save_history(user_id, type, title, content, is_pro):
     print(f"✅ History disimpan. Expired: {history_data['expires_at']}")
 
 # --- ENDPOINT RAPORT GENERATOR ---
-@app.post("/api/generate-raport")
-# Perbaikan Typo: 'authorize' diganti 'authorization' agar konsisten dengan Header
-async def endpoint_raport(request: RaportRequest, authorization: str = Header(None)):
+@app.post("/api/generate-rapor")
+async def endpoint_rapor(request: RaporRequest, authorization: str = Header(None)):
     user = get_user_from_token(authorization)
 
     is_pro = user.get("is_pro", False)
@@ -219,8 +218,8 @@ async def endpoint_raport(request: RaportRequest, authorization: str = Header(No
         raise HTTPException(status_code=400, detail="Koin tidak cukup (Butuh 30 Koin). Upgrade ke Pro!")
 
     try:
-        # Generate pakai logic yang sudah ada
-        result = generate_raport(request, is_pro_user=is_pro)
+        # Panggil fungsi yang benar: generate_rapor_comment
+        result = generate_rapor_comment(request, is_pro_user=is_pro)
 
         if final_cost > 0:
             users_collection.update_one(
@@ -232,9 +231,10 @@ async def endpoint_raport(request: RaportRequest, authorization: str = Header(No
         else:
             remaining_coins = user.get("coins", 0)
 
+        # Simpan History
         save_history(
             user_id=str(user["_id"]),
-            type="raport",
+            type="rapor",
             title=f"Rapor {request.nama_siswa}",
             content=result["content"],
             is_pro=is_pro
@@ -244,7 +244,7 @@ async def endpoint_raport(request: RaportRequest, authorization: str = Header(No
             "status": "success",
             "data": result["content"],
             "meta": {
-                "model": result["model_used"],
+                "model": result.get("model_used", "gemini-flash"), # Pakai .get untuk keamanan
                 "cost_deducted": final_cost,
                 "remaining_coins": remaining_coins
             }
