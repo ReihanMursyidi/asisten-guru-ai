@@ -278,6 +278,8 @@ async function sendRequest(endpoint, dataPayload) {
     const resultContent = document.getElementById('result-content');
     const outputDiv = document.getElementById('markdown-output');
 
+    const allButtons = document.querySelectorAll('.btn-submit');
+
     // STATE 1: MULAI LOADING
     loader.classList.remove('hidden');      // Munculkan loading
     welcome.classList.add('hidden');        // Sembunyikan welcome
