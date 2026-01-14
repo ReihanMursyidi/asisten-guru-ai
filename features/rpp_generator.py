@@ -1,12 +1,16 @@
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 import os
-import google.generativeai as genai
+import google as genai
+from google.genai import types
 
 load_dotenv()
 api_key=os.getenv("GOOGLE_API_KEY")
 
-genai.configure(api_key=api_key)
+if not api_key:
+    raise ValueError("API Key tidak ditemukan di file .env")
+
+client = genai.Client(api_key=api_key)
 
 MODEL_PRO = "gemini-2.5-pro"
 MODEL_FLASH = "gemini-2.5-flash"
@@ -32,11 +36,6 @@ class RPPGenerator(BaseModel):
 # Fungsi Generator
 def generate_rpp(data: RPPGenerator, is_pro_user: bool = False):
     selected_model = MODEL_PRO if is_pro_user else MODEL_FLASH
-
-    model = genai.GenerativeModel(
-        model_name=selected_model,
-        system_instruction=SYSTEM_INSTRUCTION
-    )
 
     # Hitung total waktu
     total_menit = data.jumlah_jp * data.durasi_per_jp
@@ -79,7 +78,15 @@ def generate_rpp(data: RPPGenerator, is_pro_user: bool = False):
 
     try:
         # Kirim ke Gemini (Direct Call)
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=selected_model,
+            contents=user_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=SYSTEM_INSTRUCTION,
+                temperature=0.7
+            )
+        )
         return response.text
+        
     except Exception as e:
         return f"Terjadi kesalahan saat menghubungi AI: {str(e)}"
