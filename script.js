@@ -455,6 +455,13 @@ function generateRPP() {
     // Ubah judul hasil & Panggil API
     document.getElementById('result-title').innerHTML = `<i class="fa-solid fa-book-open text-blue"></i> Modul Ajar (${data.mapel})`;
     sendRequest('generate-rpp', data);
+
+    if (window.innerWidth <= 768) {
+        document.querySelector('.result-panel').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start' 
+        });
+    }
 }
 
 // TRIGGER TOMBOL GENERATE QUIZ
@@ -486,6 +493,13 @@ function generateQuiz() {
 
     document.getElementById('result-title').innerHTML = `<i class="fa-solid fa-list-check text-blue"></i> Soal Kuis (${mapelFinal})`;
     sendRequest('generate-quiz', data);
+
+    if (window.innerWidth <= 768) {
+        document.querySelector('.result-panel').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start' 
+        });
+    }
 }
 
 function generateRapor() {
@@ -520,6 +534,13 @@ function generateRapor() {
     document.getElementById('result-title').innerHTML = `<i class="fa-solid fa-pen-nib text-blue"></i> Catatan Rapor (${nama})`;
 
     sendRequest('generate-rapor', data);
+
+    if (window.innerWidth <= 768) {
+        document.querySelector('.result-panel').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start' 
+        });
+    }
 }
 
 // TOGGLE DROPDOWN HISTORY
@@ -731,5 +752,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Log untuk memastikan script jalan
     console.log("EduPlan AI Ready 🚀");
     
-
 });
