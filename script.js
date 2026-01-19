@@ -157,7 +157,7 @@ function updateUserUI(userData) {
                 }
             }
 
-            const isUserPro = userData.plan === 'pro' || userData.is_pro === true;
+            const isUserPro = userData.plan === 'pro' || userData.is_pro === true || userData.is_pro === "true";
             if (typeof updateUserPlanUI === "function") {
                 updateUserPlanUI(isUserPro);
             }
