@@ -755,3 +755,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("EduPlan AI Ready 🚀");
     
 });
+
