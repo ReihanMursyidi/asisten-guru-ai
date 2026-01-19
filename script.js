@@ -763,7 +763,10 @@ function updateUserPlanUI(isPro) {
     const badgeElement = document.getElementById('user-plan-badge');
     
     // Cek apakah elemen ada? Jika tidak, berhenti agar tidak error
-    if (!badgeElement) return;
+    if (!badgeElement) {
+        console.warn("Element #user-plan-badge tidak ditemukan di HTML.");
+        return; 
+    }
 
     if (isPro) {
         // TAMPILAN PRO (Mahkota Emas)
